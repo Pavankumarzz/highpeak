@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct job {
+    int start;
+    int end;
+    int profit;
+};
+
+int compare(const void* a, const void* b) {
+    return ((struct job*)a)->end - ((struct job*)b)->end;
+}
+
+int findMaxProfit(struct job* jobs, int n) {
+    int maxProfit = 0;
+    int currentEnd = 0;
+    int task = n;
+
+    qsort(jobs, n, sizeof(struct job), compare);
+
+    for (int i = 0; i < n; i++) {
+        if (jobs[i].start >= currentEnd) {
+            currentEnd = jobs[i].end;
+            maxProfit += jobs[i].profit;
+            task--;
+        }
+    }
+
+    return maxProfit;
+}
+
+int main() {
+    int n;
+    printf("Enter the number of Jobs: ");
+    scanf("%d", &n);
+
+    struct job jobs[n];
+
+    printf("Enter job start time, end time, and earnings\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d%d%d", &jobs[i].start, &jobs[i].end, &jobs[i].profit);
+    }
+    int task;
+    int maxProfit = findMaxProfit(jobs, n);
+
+    printf("The number of tasks and earnings available for others\n");
+    printf("Task: %d\nEarnings: %d\n", task, maxProfit);
+
+    return 0;
+}
